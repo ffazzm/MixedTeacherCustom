@@ -4,11 +4,13 @@ import numpy as np
 import torch
 from tqdm import tqdm
 from sklearn.metrics import roc_auc_score
+# from datasets.mvtec import MVTecDataset
 from datasets.mvtec import MVTecDataset
 from utils.functions import (
     cal_anomaly_maps,
     cal_anomaly_maps_RnetEffNet
 )
+from utils.visualization import plt_fig
 
 from models.studentEffNet import studentEffNet
 from models.resnet_reduced_backbone import reduce_student18
@@ -105,6 +107,7 @@ class MixedTeacher:
                 scores.append(score)
             else:
                 scores.extend(score)
+            
         progressBar.close()
         scores = np.asarray(scores)
 
@@ -115,6 +118,18 @@ class MixedTeacher:
         img_scores = scores.reshape(scores.shape[0], -1).max(axis=1)
         gt_list = np.asarray(gt_list)
         img_roc_auc = roc_auc_score(gt_list, img_scores)
+        print(len(test_imgs))
+        # plt_fig(test_imgs, scores, img_scores, gt_list, 0.5, 0.5, self.img_dir, self.obj)
+        plt_fig(
+            test_imgs,            # List of images (H, W, 3)
+            scores,               # List of score maps (H, W)
+            img_scores,           # List of floats
+            gt_mask_list,         # ✅ use this instead of gt_list
+            0.1,                  # segmentation threshold
+            0.1,                  # classification threshold
+            self.img_dir,
+            self.obj
+        )
         print(self.obj + " image ROCAUC: %.3f" % (img_roc_auc))
 
        
@@ -175,5 +190,3 @@ if __name__ == "__main__":
         Combined.test()
     else:
         print("Phase argument must be train or test.")
-
-
