@@ -16,11 +16,36 @@ class MVTecDataset(Dataset):
 
         self.x, self.y, self.mask = self.load_modified_dataset_folder()
 
+        # self.transform_x = T.Compose([T.Resize(resize),
+        #                               T.CenterCrop(cropsize),
+        #                               T.ToTensor(),
+        #                               T.Normalize(mean=[0.485, 0.456, 0.406],
+        #                                           std=[0.229, 0.224, 0.225])])
+
         self.transform_x = T.Compose([T.Resize(resize),
-                                      T.CenterCrop(cropsize),
+                                    #   T.CenterCrop(cropsize),
+                                    #   T.RandomCrop(cropsize),
+                                    #   T.RandomHorizontalFlip(p=0.5),
+                                    #   T.RandomVerticalFlip(p=0.2),
+                                    #   T.ColorJitter(brightness=0.2, contrast=0.2),
+                                    #   T.RandomRotation(degrees=15),
                                       T.ToTensor(),
                                       T.Normalize(mean=[0.485, 0.456, 0.406],
                                                   std=[0.229, 0.224, 0.225])])
+        
+        # self.transform_x = T.Compose([T.Resize(resize),
+        #                             #   T.CenterCrop(cropsize),
+        #                               T.RandomCrop(cropsize),
+        #                               T.RandomCrop(224),
+        #                             #   T.RandomHorizontalFlip(p=0.5),
+        #                               T.RandomVerticalFlip(p=0.2),
+        #                               T.ColorJitter(brightness=0.2, contrast=0.2),
+        #                               T.RandomRotation(degrees=15),
+        #                               T.ToTensor(),
+        #                               T.Normalize(mean=[0.485, 0.456, 0.406],
+        #                                           std=[0.229, 0.224, 0.225])])
+
+                                                
         self.transform_mask = T.Compose([T.Resize(resize, Image.NEAREST),
                                          T.CenterCrop(cropsize),
                                          T.ToTensor()])
