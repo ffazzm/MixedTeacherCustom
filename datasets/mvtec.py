@@ -22,7 +22,7 @@ class MVTecDataset(Dataset):
         #                               T.Normalize(mean=[0.485, 0.456, 0.406],
         #                                           std=[0.229, 0.224, 0.225])])
 
-        self.transform_x = T.Compose([T.Resize(resize,resize),
+        self.transform_x = T.Compose([T.Resize((resize,resize)),
                                     #   T.CenterCrop(cropsize),
                                     #   T.RandomCrop(cropsize),
                                     #   T.RandomHorizontalFlip(p=0.5),
@@ -33,7 +33,7 @@ class MVTecDataset(Dataset):
                                       T.Normalize(mean=[0.485, 0.456, 0.406],
                                                   std=[0.229, 0.224, 0.225])])
         
-        self.transform_x_val = T.Compose([T.Resize(resize,resize),
+        self.transform_x_val = T.Compose([T.Resize((resize,resize)),
                                     #   T.CenterCrop(cropsize),
                                     #   T.RandomCrop(cropsize),
                                     #   T.RandomHorizontalFlip(p=0.5),
