@@ -27,24 +27,22 @@ class MVTecDataset(Dataset):
                                     #   T.RandomCrop(cropsize),
                                     #   T.RandomHorizontalFlip(p=0.5),
                                     #   T.RandomVerticalFlip(p=0.2),
-                                    #   T.ColorJitter(brightness=0.2, contrast=0.2),
+                                      T.ColorJitter(brightness=0.2, contrast=0.2),
                                     #   T.RandomRotation(degrees=15),
                                       T.ToTensor(),
                                       T.Normalize(mean=[0.485, 0.456, 0.406],
                                                   std=[0.229, 0.224, 0.225])])
         
-        # self.transform_x = T.Compose([T.Resize(resize),
-        #                             #   T.CenterCrop(cropsize),
-        #                               T.RandomCrop(cropsize),
-        #                               T.RandomCrop(224),
-        #                             #   T.RandomHorizontalFlip(p=0.5),
-        #                               T.RandomVerticalFlip(p=0.2),
-        #                               T.ColorJitter(brightness=0.2, contrast=0.2),
-        #                               T.RandomRotation(degrees=15),
-        #                               T.ToTensor(),
-        #                               T.Normalize(mean=[0.485, 0.456, 0.406],
-        #                                           std=[0.229, 0.224, 0.225])])
-
+        self.transform_x_val = T.Compose([T.Resize(resize),
+                                    #   T.CenterCrop(cropsize),
+                                    #   T.RandomCrop(cropsize),
+                                    #   T.RandomHorizontalFlip(p=0.5),
+                                    #   T.RandomVerticalFlip(p=0.2),
+                                    #   T.ColorJitter(brightness=0.2, contrast=0.2),
+                                    #   T.RandomRotation(degrees=15),
+                                      T.ToTensor(),
+                                      T.Normalize(mean=[0.485, 0.456, 0.406],
+                                                  std=[0.229, 0.224, 0.225])])
                                                 
         self.transform_mask = T.Compose([T.Resize(resize, Image.NEAREST),
                                          T.CenterCrop(cropsize),
@@ -55,7 +53,10 @@ class MVTecDataset(Dataset):
 
         # Load and transform the input image
         x = Image.open(x_path).convert('RGB')
-        x = self.transform_x(x)
+        if self.is_train:
+            x = self.transform_x(x)
+        else:
+            x = self.transform_x_val(x)
 
         # Load the mask, or create blank mask if not available
         if mask_path is None or not os.path.isfile(mask_path):
